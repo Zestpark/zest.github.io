@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpaceRouter</title>
+  <link rel="icon" type="image/png" href="Public/favicon_spacerouter.png" />
+  <link rel="apple-touch-icon"     href="Public/favicon_spacerouter.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:          #111111;
+      --bg2:         #181818;
+      --text:        #d4d4d4;
+      --text-dim:    #787878;
+      --text-faint:  #3a3a3a;
+      --border:      rgba(212,212,212,0.1);
+      --border-md:   rgba(212,212,212,0.18);
+      --blue:        #3B5BFF;
+      --blue-bright: #6680FF;
+      --nav-h:       56px;
+      --rail:        80px;
+      --ff:          'Plus Jakarta Sans', sans-serif;
+      --ff-mono:     'JetBrains Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--ff);
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      display: grid;
+      grid-template-columns: var(--rail) auto 1fr auto var(--rail);
+      align-items: stretch;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17,17,17,.92);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+    }
+    .nav-rail-l { border-right: 1px solid var(--border); }
+    .nav-rail-r { border-left: 1px solid var(--border); }
+    .nav-logo {
+      display: flex; align-items: center;
+      padding: 0 22px;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: .04em; text-transform: uppercase;
+      color: var(--text);
+      cursor: pointer !important;
+      white-space: nowrap;
+      border-right: 1px solid var(--border);
+    }
+    .nav-links {
+      display: flex; align-items: stretch; justify-content: center; flex: 1;
+    }
+    .nav-links a {
+      font-size: 10.5px; font-weight: 400;
+      color: var(--text-dim);
+      padding: 0 11px;
+      display: flex; align-items: center;
+      letter-spacing: .01em;
+      transition: color .15s;
+      white-space: nowrap;
+      border-right: 1px solid var(--border);
+    }
+    .nav-links a:first-child { border-left: 1px solid var(--border); }
+    .nav-links a:hover { color: var(--text); }
+    .nav-coords {
+      display: flex; align-items: center; padding: 0 16px;
+      font-family: var(--ff-mono); font-size: 9px;
+      color: var(--text-faint); letter-spacing: .04em; white-space: nowrap;
+      border-left: 1px solid var(--border);
+      min-width: 130px;
+    }
+    .nav-back {
+      font-family: var(--ff-mono); font-size: 10.5px;
+      color: var(--text-dim); letter-spacing: .04em;
+      transition: color .15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* ── Main layout ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: calc(var(--nav-h) + 60px) 24px 80px;
+    }
+
+    /* ── Card ── */
+    .card {
+      width: 100%; max-width: 480px;
+      border: 1px solid var(--border-md);
+      border-radius: 6px;
+      background: var(--bg2);
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 36px 40px 32px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .card-header::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(59,91,255,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .card-eyebrow {
+      font-family: var(--ff-mono); font-size: 9.5px;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--text-faint); margin-bottom: 14px;
+      position: relative; z-index: 1;
+    }
+    .card-title {
+      font-size: 28px; font-weight: 800;
+      letter-spacing: -.02em; color: #fff;
+      margin-bottom: 10px;
+      position: relative; z-index: 1;
+    }
+    .card-desc {
+      font-size: 14px; font-weight: 300;
+      color: var(--text-dim); line-height: 1.65;
+      position: relative; z-index: 1;
+    }
+
+    /* ── Warning notice ── */
+    .warning-box {
+      margin: 0;
+      padding: 14px 40px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(251,191,36,0.04);
+      border-left: 3px solid rgba(251,191,36,0.4);
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .warning-icon {
+      font-size: 13px; flex-shrink: 0; margin-top: 1px;
+    }
+    .warning-text {
+      font-family: var(--ff-mono); font-size: 10.5px;
+      color: rgba(251,191,36,0.7); letter-spacing: .02em;
+      line-height: 1.6;
+    }
+
+    /* ── Form body ── */
+    .card-body { padding: 28px 40px 32px; }
+
+    .field-label {
+      font-family: var(--ff-mono); font-size: 9.5px;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 8px;
+      display: block;
+    }
+    .field-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-md);
+      border-radius: 4px;
+      padding: 12px 16px;
+      font-family: var(--ff); font-size: 14px;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+      margin-bottom: 16px;
+    }
+    .field-input::placeholder { color: var(--text-faint); }
+    .field-input:focus { border-color: var(--blue); }
+
+    .submit-btn {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid var(--border-md);
+      border-radius: 4px;
+      padding: 13px 24px;
+      font-family: var(--ff); font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+      margin-bottom: 20px;
+    }
+    .submit-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--border-str); }
+    .submit-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    .alt-link {
+      display: block; text-align: center;
+      font-family: var(--ff-mono); font-size: 10.5px;
+      color: var(--text-dim); letter-spacing: .04em;
+      transition: color .15s;
+    }
+    .alt-link:hover { color: var(--blue-bright); }
+
+    .form-msg {
+      font-size: 13px; text-align: center;
+      margin-bottom: 14px; min-height: 18px;
+      color: #4ade80;
+    }
+    .form-msg.error { color: #f87171; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 20px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo { font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--text-faint); }
+    .footer-note { font-family: var(--ff-mono); font-size: 10px; color: var(--text-faint); }
+
+    @media (max-width: 1280px) { :root { --rail: 32px; } }
+    @media (max-width: 1024px) {
+      :root { --rail: 24px; }
+      .nav-rail-l, .nav-rail-r, .nav-coords { display: none; }
+      .nav-logo { padding: 0 16px; border-right: none; }
+      nav { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 540px) {
+      .card-header, .warning-box, .card-body { padding-left: 24px; padding-right: 24px; }
+      footer { padding: 16px 20px; flex-direction: column; gap: 6px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-rail-l"></div>
+    <a class="nav-logo" href="index.html">SpaceRouter</a>
+    <div class="nav-links"></div>
+    <div class="nav-coords" id="coords">X : — &nbsp;&nbsp; Y : —</div>
+    <div class="nav-rail-r"></div>
+  </nav>
+
+  <!-- Main -->
+  <main>
+    <div class="card">
+      <div class="card-header">
+        <h1 class="card-title">Reissue API Key</h1>
+        <p class="card-desc">Lost your API key? Enter your verified email address and we'll send a verification link to issue a new one. Your previous key will be deactivated.</p>
+      </div>
+
+      <div class="warning-box">
+        <span class="warning-icon">⚠</span>
+        <span class="warning-text">Your current API key will be permanently deactivated once a new one is issued. Any services using the old key will stop working immediately.</span>
+      </div>
+
+      <div class="card-body">
+        <label class="field-label" for="reissueEmail">Email address</label>
+        <input
+          class="field-input"
+          type="email"
+          id="reissueEmail"
+          placeholder="you@example.com"
+          required
+        />
+        <p class="form-msg" id="reissueMsg"></p>
+        <button class="submit-btn" id="reissueBtn">Send Verification Email</button>
+        <a class="alt-link" href="payment.html">← Back to billing</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">SpaceRouter</div>
+    <div class="footer-note">Powered by Spacecoin</div>
+  </footer>
+
+  <script>
+    const btn = document.getElementById('reissueBtn');
+    const input = document.getElementById('reissueEmail');
+    const msg = document.getElementById('reissueMsg');
+
+    btn.addEventListener('click', async function() {
+      const email = input.value.trim();
+      if (!email || !email.includes('@')) {
+        msg.textContent = 'Please enter a valid email address.';
+        msg.className = 'form-msg error';
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      msg.textContent = '';
+      msg.className = 'form-msg';
+
+      // TODO: wire to backend reissue endpoint
+      await new Promise(r => setTimeout(r, 1000));
+      msg.textContent = 'Verification email sent. Check your inbox.';
+      msg.className = 'form-msg';
+      btn.textContent = 'Email Sent';
+      input.value = '';
+    });
+
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+
+    document.addEventListener('mousemove', e => {
+      document.getElementById('coords').textContent =
+        `X : ${e.clientX}   Y : ${e.clientY}`;
+    });
+  </script>
+</body>
+</html>
