@@ -25,6 +25,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
+    @font-face {
+      font-family: 'Pilat';
+      src: url('Public/fonts/Pilat-Demi.woff2') format('woff2'),
+           url('Public/fonts/Pilat-Demi.woff') format('woff');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
     /* ─── TOKENS ───────────────────────────────────────── */
     :root {
       --bg:           #111111;
@@ -99,8 +107,9 @@
     .nav-logo {
       display: flex; align-items: center;
       padding: 0 22px;
+      font-family: 'Pilat', var(--ff);
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 600;
       letter-spacing: .04em;
       text-transform: uppercase;
       color: var(--text);
@@ -1136,7 +1145,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 24px 48px;
     }
-    .footer-logo { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .footer-logo { font-family: 'Pilat', var(--ff); font-size: 13px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
     .footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
     .footer-by { font-family: var(--ff-mono); font-size: 10px; color: var(--text-faint); letter-spacing: .05em; }
     .footer-by a { color: var(--text-dim); transition: color .15s; }
